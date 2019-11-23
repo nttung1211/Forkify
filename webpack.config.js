@@ -13,7 +13,7 @@ module.exports = {
     mode: 'development',
     watchOptions: {
         ignored: /node_modules/,
-        aggregateTimeout: 500
+        aggregateTimeout: 100
     },
     entry: {
         App: './src/scripts/app.js'
@@ -90,8 +90,8 @@ module.exports = {
         }),
         new CleanWebpackPlugin(),
         new CopyPlugin([
-            { from: '*.svg', to: 'img', context: './src/img'},
-            { from: 'favicon.*', to: 'img', context: './src/img'},
+            { from: '*.svg', to: 'img', context: './src/img' },
+            { from: 'favicon.*', to: 'img', context: './src/img' },
         ])
     ]
 };
