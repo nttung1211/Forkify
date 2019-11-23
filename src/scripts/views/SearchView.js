@@ -21,6 +21,7 @@ function trimTittle(title, limit = 17) {
         if (index !== -1) {
             title = title.substring(0, index);
         }
+        return `${title} ...`;
     }
     // while (title.length > limit) {
     //     title = title.split(` `);
