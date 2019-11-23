@@ -1,17 +1,26 @@
-import '../css/app.scss';
-import axios from 'axios';
-import { name as ten } from './models/Search.js';
 // if we use export defautl we do not need the exact name but we can not export multiple files
-// we import using * ex: import * as objecName form '...'; it will an object 
+import '../css/app.scss';
+import { Search } from './models/Search.js';
+import { elements } from './views/Base.js';
+import * as SearchView from './views/SearchView.js';
 
-async function getRecipe(query) {
-    try {
-        // const recipe = await axios(`https://forkify-api.herokuapp.com/api/search?key=f438tu34jf&q=${query}`);
-        const response = await axios(`https://cors-anywhere.herokuapp.com/https://forkify-api.herokuapp.com/api/search?q=${query}`);
-        console.log(response);
-        console.log(response.data.recipes);
-    } catch(error) {
-        console.log(error);
+
+
+const state = {
+};
+
+async function controlSearch() {
+    let query = SearchView.getInput();
+
+    if (query) {
+        state.search = new Search(query);
+        await state.search.getRecipe(); // async funtion always return a promise no matter if we tell it to return something or not
+        SearchView.clean();
+        SearchView.renderRecipes(state.search.result);
     }
 }
-getRecipe(`bacon`);
+
+elements.searchBtn.addEventListener(`submit`, e => {
+    e.preventDefault();
+    controlSearch();
+})
