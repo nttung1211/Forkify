@@ -3,7 +3,7 @@ import '../css/app.scss';
 import { Search } from './models/Search.js';
 import { elements, renderLoader } from './views/Base.js';
 import * as SearchView from './views/SearchView.js';
-
+import { Recipe } from './models/Recipe.js';
 
 
 const state = {
@@ -35,3 +35,7 @@ elements.searchResultsPages.addEventListener(`click`, e => {
         SearchView.renderRecipes(state.search.recipes, page);
     }
 })
+
+let tung = new Recipe(35120);
+tung.getRecipe();
+console.log(tung);
