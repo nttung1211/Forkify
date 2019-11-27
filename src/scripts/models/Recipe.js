@@ -16,7 +16,7 @@ export class Recipe {
             this.ingredients = response.data.recipe.ingredients;
 
         } catch(error) {
-            console.log(error);
+            console.log(`Recipe ${error}`);
         }
     }
 
@@ -29,5 +29,17 @@ export class Recipe {
 
     calServing() {
         this.serving = 4;
+    }
+
+    parseIngredient() {
+        let longUnits = [`tablespoon`, `ounce`, `teaspoon`, `cup`, `pound`];
+        let shortUnits = [`tbsp`, `oz`, `tsp`, `cup`, `pound`];
+        this.ingredients = this.ingredients.map(item => {
+            longUnits.forEach((unit, i) => {
+                item = item.replace(new RegExp(`${unit}s?`, `gi`), shortUnits[i]);
+                item = item.replace(/ *\([^)]*\) */g, ` `);
+            })
+            return item;
+        })
     }
 }

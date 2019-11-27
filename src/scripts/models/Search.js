@@ -12,7 +12,7 @@ export class Search {
             this.recipes = response.data.recipes;
             console.log(response);
         } catch(error) {
-            console.log(error);
+            console.log(`Seach ${error}`);
         }
     }
 }

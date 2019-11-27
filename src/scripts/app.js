@@ -12,13 +12,18 @@ const state = {
 async function controlSearch() {
     let query = SearchView.getInput();
 
-    if (query) {
+    try {
+        if (query) {
+            SearchView.clean();
+            renderLoader(elements.searchResultsList);
+            state.search = new Search(query);
+            await state.search.getRecipe(); // async funtion always return a promise no matter if we tell it to return something or not
+            SearchView.clean();
+            SearchView.renderRecipes(state.search.recipes);
+        }
+    } catch(err) {
+        alert(`Search rendering ${err}`);
         SearchView.clean();
-        renderLoader(elements.searchResultsList);
-        state.search = new Search(query);
-        await state.search.getRecipe(); // async funtion always return a promise no matter if we tell it to return something or not
-        SearchView.clean();
-        SearchView.renderRecipes(state.search.recipes);
     }
 }
 
@@ -29,6 +34,7 @@ elements.searchBtn.addEventListener(`submit`, e => {
 
 elements.searchResultsPages.addEventListener(`click`, e => {
     let btn = e.target.closest(`.btn-inline`);
+
     if (btn) {
         let page = +btn.dataset.goto;
         SearchView.clean();
@@ -36,6 +42,24 @@ elements.searchResultsPages.addEventListener(`click`, e => {
     }
 })
 
-let tung = new Recipe(35120);
-tung.getRecipe();
-console.log(tung);
+async function controllRecipe(e) {
+    let id = window.location.hash.replace(`#`, ``);
+
+    if (id) {
+        try {
+            state.recipe = new Recipe(id);
+            await state.recipe.getRecipe();
+            // testing************
+            console.log(state.recipe);
+            state.recipe.parseIngredient();
+            // console.log(state.recipe);
+            // console.log(state.recipe);
+        } catch(err) {
+            alert(`Recipe rendering ${err}`)
+        }
+    }
+}
+
+[`hashchange`, `load`].forEach(e => {
+    window.addEventListener(e, controllRecipe);
+})
