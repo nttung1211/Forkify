@@ -31,15 +31,50 @@ export class Recipe {
         this.serving = 4;
     }
 
+    updateServing(operator) {
+        let newServing = eval(`${this.serving}${operator}1`);
+        this.ingredients.forEach(ing => {
+            ing.count *= newServing / this.serving;
+        })
+        this.serving = newServing;
+    }
+
     parseIngredient() {
-        let longUnits = [`tablespoon`, `ounce`, `teaspoon`, `cup`, `pound`];
-        let shortUnits = [`tbsp`, `oz`, `tsp`, `cup`, `pound`];
+        let longUnits = [`tablespoon`, `ounce`, `teaspoon`, `cup`, `pound`],
+            shortUnits = [`tbsp`, `oz`, `tsp`, `cup`, `pound`],
+            units = [...shortUnits, `kg`, `g`];
         this.ingredients = this.ingredients.map(item => {
             longUnits.forEach((unit, i) => {
                 item = item.replace(new RegExp(`${unit}s?`, `gi`), shortUnits[i]);
                 item = item.replace(/ *\([^)]*\) */g, ` `);
             })
             return item;
+        })
+        this.ingredients = this.ingredients.map(item => {
+            let obj,
+                unit = ``,
+                itemArray = item.split(` `),
+                lastNumIndex = itemArray.findIndex((word, i) => /[0-9\/\-]+/.test(word) && /[a-z]+/i.test(itemArray[i + 1]));
+            if (lastNumIndex !== -1) {
+                for (let u of units) {
+                    if (itemArray.includes(u)) {
+                        unit = u;
+                        break;
+                    }
+                };
+                obj = {
+                    count: eval(((itemArray.slice(0, lastNumIndex + 1)).join(`+`)).replace(`-`, `+`)),
+                    unit,
+                    ingredient: (itemArray.slice(lastNumIndex + (unit ? 2 : 1))).join(` `)
+                }
+            } else {
+                obj = {
+                    count: 1,
+                    unit,
+                    ingredient: item
+                }
+            }
+            return obj;
         })
     }
 }

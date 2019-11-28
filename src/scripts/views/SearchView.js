@@ -4,7 +4,7 @@ export function getInput() {
     return elements.searchInp.value;
 }
 
-export function clean() {
+export function clearSearch() {
     elements.searchInp.value = ``;
     elements.searchResultsList.innerHTML = ``;
     elements.searchResultsPages.innerHTML = ``;
@@ -15,6 +15,11 @@ export function renderRecipes(recipes, page = 1, perPage = 10) {
         end = page * perPage;
     recipes.slice(start, end).forEach(renderRecipe);
     elements.searchResultsPages.innerHTML = renderPageBtn(page, perPage, recipes.length);
+}
+
+export function highlight(id) {
+    elements.searchResultsList.querySelectorAll(`a`).forEach(a => a.classList.remove(`results__link--active`));
+    elements.searchResultsList.querySelector(`a[href="#${id}"]`).classList.add(`results__link--active`);
 }
 
 function renderPageBtn(page, perPage, numOfRecipes){
