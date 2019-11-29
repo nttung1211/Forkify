@@ -1,4 +1,4 @@
-import { elements } from './Base.js';
+import { elements, trimTittle } from './Base.js';
 
 export function getInput() {
     return elements.searchInp.value;
@@ -19,7 +19,7 @@ export function renderRecipes(recipes, page = 1, perPage = 10) {
 
 export function highlight(id) {
     elements.searchResultsList.querySelectorAll(`a`).forEach(a => a.classList.remove(`results__link--active`));
-    elements.searchResultsList.querySelector(`a[href="#${id}"]`).classList.add(`results__link--active`);
+    elements.searchResultsList.querySelector(`.results__link[href="#${id}"]`).classList.add(`results__link--active`);
 }
 
 function renderPageBtn(page, perPage, numOfRecipes){
@@ -49,24 +49,6 @@ function createBtn(page, type) {
             </svg>
         </button>
     `;
-}
-
-function trimTittle(title, limit = 17) {
-    if (title.length > limit) {
-        title = title.substring(0, limit);
-        let index = title.lastIndexOf(` `);
-
-        if (index !== -1) {
-            title = title.substring(0, index);
-        }
-        return `${title} ...`;
-    }
-    // while (title.length > limit) {
-    //     title = title.split(` `);
-    //     title.pop();
-    //     title = title.join(` `);
-    // }
-    return title;
 }
 
 function renderRecipe(recipe) {

@@ -1,6 +1,6 @@
 import { elements } from '../views/Base.js';
 
-export function renderRecipe(recipe) {
+export function renderRecipe(recipe, isLiked) {
     let markup = `
         <figure class="recipe__fig">
             <img src="${recipe.img}" alt="${recipe.title}" class="recipe__img">
@@ -39,7 +39,7 @@ export function renderRecipe(recipe) {
             </div>
             <button class="recipe__love">
                 <svg class="header__likes">
-                    <use href="img/icons.svg#icon-heart-outlined"></use>
+                    <use href="img/icons.svg#icon-heart${isLiked ? '' : '-outlined'}"></use>
                 </svg>
             </button>
         </div>
@@ -51,7 +51,7 @@ export function renderRecipe(recipe) {
                 ${recipe.ingredients.map(ing => createIngredient(ing)).join(``)}
             </ul>
 
-            <button class="btn-small recipe__btn">
+            <button class="btn-small recipe__btn recipe__btn--add">
                 <svg class="search__icon">
                     <use href="img/icons.svg#icon-shopping-cart"></use>
                 </svg>
